@@ -4,9 +4,11 @@ from slash_slack import SlashSlack, String
 from simple_salesforce import Salesforce
 from collections import OrderedDict
 
-sf = Salesforce(username='philip.pol@bench.co',
-                password='',
-                security_token='')
+
+#environment variables need to be set in your .zshrc or .bashrc file.
+sf = Salesforce(username=os.environ["SF_UNAME"],
+                password=os.environ["SF_PW"],
+                security_token=os.environ["SF_SECURITY_TOKEN"])
 
 slash = SlashSlack(
     dev=True
