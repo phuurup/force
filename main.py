@@ -1,6 +1,6 @@
 import os
 import json
-from slash_slack import SlashSlack, String
+from slash_slack import SlashSlack, String, Flag
 from simple_salesforce import Salesforce
 from collections import OrderedDict
 
@@ -22,12 +22,25 @@ app = slash.get_fast_api()
     summary="get client info based on Bench Id",
     help="grabs salesforce client id based on the Bench Id you enter",
 )
-def client(benchId: str = String(help="The Bench Id to search")):
+def client(
+    benchId: str = String(help="The Bench Id to search"),
+    tax=Flag(help="Returns BenchTax Years paid for by the client"),
+    bpa=Flag(help="Returns BenchTax Years paid for by the client"),
+):
+    
     try:
-        data = getAccountInfo(benchId)
-        return data, None
+        if tax:
+            return getClientTaxInfo(benchId), None
+        if bpa:
+            return getClientInfo(benchId), None
+        return getAccountInfo(benchId), None
     except Exception as e:
         return f"An error occurred: {str(e)}"
+    
+
+    
+        
+
 
 def getAccountInfo(benchId: str):
     try:
@@ -43,4 +56,12 @@ def getAccountInfo(benchId: str):
         return result
     except Exception as e:
         return f"An error occurred: {str(e)}"
+
+def getClientTaxInfo(benchId: str):
+    #get relevant data from sf query and return it
+    pass
+
+def getClientInfo(benchId: str):
+    #get relevant data for BPAs
+    pass
   #Test
